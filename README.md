@@ -1,7 +1,8 @@
 # Anotacoes
-- Se você tiver mais de um repositório clonado, pode ser demorado fazer a mesma ação para todos os repositórios um por um. Para resolver isso, você pode usar o seguinte modelo de comando:
 
-- Then create a skeleton app in the app store. This doesn’t publish anything on the appstore yet, it just gives you a download. <a href="https://apps.nextcloud.com/developer/apps/generate">link</a>
+- Docs NextCloud Dev: https://docs.nextcloud.com/
+
+- Create a skeleton app in the app store. This doesn’t publish anything on the appstore yet, it just gives you a download. <a href="https://apps.nextcloud.com/developer/apps/generate">link</a>
 
 - Colocar nome pequeno no App
 
@@ -20,6 +21,7 @@ sudo php -S localhost:8080
 SPDX-FileCopyrightText: Pablo Lucas Silva Santos <pablo@amoradev.com>
 SPDX-License-Identifier: CC0-1.0
 -->
+- Parei em https://docs.nextcloud.com/server/stable/developer_manual/app_development/tutorial.html#writing-a-test-for-the-controller-recommended
 
 # Amora Dev App Note NextCloud
 Place this app in **nextcloud/apps/**

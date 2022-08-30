@@ -1,49 +1,43 @@
 <?php
-
 namespace OCA\AmoraDev\Controller;
 
-use Exception;
-
 use OCP\IRequest;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Controller;
 
-use OCA\AmoraDev\Db\Note;
-use OCA\AmoraDev\Db\NoteMapper;
+use OCA\AmoraDev\Service\NoteService;
 
-class NoteController extends Controller
-{
+class NoteController extends Controller {
 
-    private $mapper;
-    private $userId;
+    private $service;
+  private $userId;
 
-    public function __construct(string $AppName, IRequest $request, NoteMapper $mapper, $UserId)
-    {
+    // Para retono de erros
+    use Errors;
+
+    public function __construct(string $AppName, IRequest $request,
+                                NoteService $service, $UserId){
         parent::__construct($AppName, $request);
-        $this->mapper = $mapper;
+        $this->service = $service;
         $this->userId = $UserId;
     }
 
     /**
      * @NoAdminRequired
      */
-    public function index()
-    {
-        return new DataResponse($this->mapper->findAll($this->userId));
+    public function index() {
+        return new DataResponse($this->service->findAll($this->userId));
     }
 
     /**
-      * @NoAdminRequired
-      *
-      * @param int $id
-      */
-      public function show(int $id) {
-        try {
-            return new DataResponse($this->mapper->find($id, $this->userId));
-        } catch(Exception $e) {
-            return new DataResponse([], Http::STATUS_NOT_FOUND);
-        }
+     * @NoAdminRequired
+     *
+     * @param int $id
+     */
+    public function show(int $id) {
+        return $this->handleNotFound(function () use ($id) {
+            return $this->service->find($id, $this->userId);
+        });
     }
 
     /**
@@ -53,11 +47,7 @@ class NoteController extends Controller
      * @param string $content
      */
     public function create(string $title, string $content) {
-        $note = new Note();
-        $note->setTitle($title);
-        $note->setContent($content);
-        $note->setUserId($this->userId);
-        return new DataResponse($this->mapper->insert($note));
+        return $this->service->create($title, $content, $this->userId);
     }
 
     /**
@@ -68,14 +58,9 @@ class NoteController extends Controller
      * @param string $content
      */
     public function update(int $id, string $title, string $content) {
-        try {
-            $note = $this->mapper->find($id, $this->userId);
-        } catch(Exception $e) {
-            return new DataResponse([], Http::STATUS_NOT_FOUND);
-        }
-        $note->setTitle($title);
-        $note->setContent($content);
-        return new DataResponse($this->mapper->update($note));
+        return $this->handleNotFound(function () use ($id, $title, $content) {
+            return $this->service->update($id, $title, $content, $this->userId);
+        });
     }
 
     /**
@@ -84,13 +69,9 @@ class NoteController extends Controller
      * @param int $id
      */
     public function destroy(int $id) {
-        try {
-            $note = $this->mapper->find($id, $this->userId);
-        } catch(Exception $e) {
-            return new DataResponse([], Http::STATUS_NOT_FOUND);
-        }
-        $this->mapper->delete($note);
-        return new DataResponse($note);
+        return $this->handleNotFound(function () use ($id) {
+            return $this->service->delete($id, $this->userId);
+        });
     }
 
 }
