@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+    <!--
+    SPDX-FileCopyrightText: Pablo Lucas Silva Santos <pablo@amoradev.com>
+    SPDX-License-Identifier: CC0-1.0
+    -->
+    <id>amoradev</id>
+    <name>Amora Dev</name>
+    <summary>Amora Dev Estudo</summary>
+    <description><![CDATA[App de Estudo do Next Cloud - Amora Dev]]></description>
+    <version>0.0.1</version>
+    <licence>agpl</licence>
+    <author mail="pablo@amoradev.com" homepage="https://github.com/pablolucas890">Pablo Lucas Silva Santos</author>
+    <namespace>AmoraDev</namespace>
+    <category>office</category>
+    <bugs>https://github.com/pablolucas890</bugs>
+    <dependencies>
+        <nextcloud min-version="24" max-version="24"/>
+    </dependencies>
+    <navigations>
+        <navigation>
+            <name>Amora Dev</name>
+            <route>amoradev.page.index</route>
+        </navigation>
+    </navigations>
+</info>
