@@ -29,6 +29,7 @@ class NoteControllerTest extends TestCase {
 	}
 
 	public function testUpdate(): void {
+		// the existing note
 		$note = 'just check if this value is returned correctly';
 		$this->service->expects($this->once())
 			->method('update')
@@ -44,6 +45,9 @@ class NoteControllerTest extends TestCase {
 	}
 
 
+    /**
+     * @expectedException OCA\NotesTutorial\Service\NotFoundException
+     */
 	public function testUpdateNotFound(): void {
 		// test the correct status code if no note is found
 		$this->service->expects($this->once())

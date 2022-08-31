@@ -1,80 +1,89 @@
 <?php
-declare(strict_types=1);
-// SPDX-FileCopyrightText: Pablo Lucas Silva Santos <pablo@amoradev.com>
-// SPDX-License-Identifier: AGPL-3.0-or-later
+// Controlador praticamente identico ao NoteController, porem criado para que haja uma eventual
+// Comunicacao com apps externos (API Rest)
 
 namespace OCA\AmoraDev\Controller;
 
-use OCA\AmoraDev\AppInfo\Application;
-use OCA\AmoraDev\Service\NoteService;
-use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\ApiController;
+
+use OCA\AmoraDev\Service\NoteService;
 
 class NoteApiController extends ApiController {
-	private NoteService $service;
-	private ?string $userId;
 
-	use Errors;
+    private $service;
+    private $userId;
 
-	public function __construct(IRequest $request,
-								NoteService $service,
-								?string $userId) {
-		parent::__construct(Application::APP_ID, $request);
-		$this->service = $service;
-		$this->userId = $userId;
-	}
+    use Errors;
 
-	/**
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function index(): DataResponse {
-		return new DataResponse($this->service->findAll($this->userId));
-	}
+    public function __construct($AppName, IRequest $request,
+                                NoteService $service, $UserId){
+        parent::__construct($AppName, $request);
+        $this->service = $service;
+        $this->userId = $UserId;
+    }
 
-	/**
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function show(int $id): DataResponse {
-		return $this->handleNotFound(function () use ($id) {
-			return $this->service->find($id, $this->userId);
-		});
-	}
+    /**
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     */
+    public function index() {
+        return new DataResponse($this->service->findAll($this->userId));
+    }
 
-	/**
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function create(string $title, string $content): DataResponse {
-		return new DataResponse($this->service->create($title, $content,
-			$this->userId));
-	}
+    /**
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     *
+     * @param int $id
+     */
+    public function show($id) {
+        return $this->handleNotFound(function () use ($id) {
+            return $this->service->find($id, $this->userId);
+        });
+    }
 
-	/**
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function update(int $id, string $title,
-						   string $content): DataResponse {
-		return $this->handleNotFound(function () use ($id, $title, $content) {
-			return $this->service->update($id, $title, $content, $this->userId);
-		});
-	}
+    /**
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     *
+     * @param string $title
+     * @param string $content
+     */
+    public function create($title, $content) {
+        return $this->service->create($title, $content, $this->userId);
+    }
 
-	/**
-	 * @CORS
-	 * @NoCSRFRequired
-	 * @NoAdminRequired
-	 */
-	public function destroy(int $id): DataResponse {
-		return $this->handleNotFound(function () use ($id) {
-			return $this->service->delete($id, $this->userId);
-		});
-	}
+    /**
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     *
+     * @param int $id
+     * @param string $title
+     * @param string $content
+     */
+    public function update($id, $title, $content) {
+        return $this->handleNotFound(function () use ($id, $title, $content) {
+            return $this->service->update($id, $title, $content, $this->userId);
+        });
+    }
+
+    /**
+     * @CORS
+     * @NoCSRFRequired
+     * @NoAdminRequired
+     *
+     * @param int $id
+     */
+    public function destroy($id) {
+        return $this->handleNotFound(function () use ($id) {
+            return $this->service->delete($id, $this->userId);
+        });
+    }
+
 }

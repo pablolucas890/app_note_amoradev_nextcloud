@@ -1,56 +1,43 @@
 <template>
-    <!--
-    SPDX-FileCopyrightText: Pablo Lucas Silva Santos <pablo@amoradev.com>
-    SPDX-License-Identifier: AGPL-3.0-or-later
-    -->
 	<div id="content" class="app-amoradev">
 		<AppNavigation>
-			<AppNavigationNew v-if="!loading"
-				:text="t('amoradev', 'New note')"
-				:disabled="false"
-				button-id="new-amoradev-button"
-				button-class="icon-add"
-				@click="newNote" />
+			<AppNavigationNew v-if="!loading" :text="t('amoradev', 'Nova Nota')" :disabled="false"
+				button-id="new-amoradev-button" button-class="icon-add" @click="newNote" />
 			<ul>
-				<AppNavigationItem v-for="note in notes"
-					:key="note.id"
-					:title="note.title ? note.title : t('amoradev', 'New note')"
-					:class="{active: currentNoteId === note.id}"
-					@click="openNote(note)">
+				<AppNavigationItem v-for="note in notes" :key="note.id"
+					:title="note.title ? note.title : t('amoradev', 'Nova Nota')"
+					:class="{ active: currentNoteId === note.id }" :loading="note.id === -1 ? true : false"
+					:icon="note.id === -1 ? '' : 'icon-file'" @click="openNote(note)">
 					<template slot="actions">
-						<ActionButton v-if="note.id === -1"
-							icon="icon-close"
-							@click="cancelNewNote(note)">
-							{{
-							t('amoradev', 'Cancel note creation') }}
+						<ActionButton v-if="note.id === -1" icon="icon-close" @click="cancelNewNote(note)">
+							{{  t('amoradev', 'Cancelar')  }}
 						</ActionButton>
-						<ActionButton v-else
-							icon="icon-delete"
-							@click="deleteNote(note)">
-							{{
-							 t('amoradev', 'Delete note') }}
+						<ActionButton v-else icon="icon-delete" @click="deleteNote(note)">
+							{{  t('amoradev', 'Deletar')  }}
 						</ActionButton>
 					</template>
 				</AppNavigationItem>
 			</ul>
 		</AppNavigation>
 		<AppContent>
-			<div v-if="currentNote">
-				<input ref="title"
-					v-model="currentNote.title"
-					type="text"
-					:disabled="updating">
-				<textarea ref="content" v-model="currentNote.content" :disabled="updating" />
-				<input type="button"
-					class="primary"
-					:value="t('amoradev', 'Save')"
-					:disabled="updating || !savePossible"
-					@click="saveNote">
-			</div>
-			<div v-else id="emptycontent">
-				<div class="icon-file" />
-				<h2>{{
-				 t('amoradev', 'Create a note to get started') }}</h2>
+			<div class="general-content">
+				<div v-if="currentNote">
+					<div class="title-app">
+						<h2>{{  t('amoradev', 'Crie uma nota no Aplicativo AmoraDev')  }}</h2>
+						<img src="./assets/amora.png" alt="amora" width="50">
+					</div>
+					<label for="title">Titulo da Nota:</label>
+					<input ref="title" v-model="currentNote.title" type="text" :disabled="updating">
+					<label for="content">Conteudo da Nota:</label>
+					<textarea ref="content" v-model="currentNote.content" :disabled="updating" rows="20" />
+					<input type="button" class="primary" :value="t('amoradev', 'Salvar')"
+						:disabled="updating || !savePossible" @click="saveNote">
+				</div>
+				<div v-else id="emptycontent">
+					<div class="icon-clippy" />
+					<h2>{{  t('amoradev', 'Crie uma nota no Aplicativo AmoraDev')  }}</h2>
+				</div>
+
 			</div>
 		</AppContent>
 	</div>
@@ -114,7 +101,7 @@ export default {
 			this.notes = response.data
 		} catch (e) {
 			console.error(e)
-			showError(t('notestutorial', 'Could not fetch notes'))
+			showError(t('amoradev', 'Could not fetch notes'))
 		}
 		this.loading = false
 	},
@@ -180,9 +167,10 @@ export default {
 				const index = this.notes.findIndex((match) => match.id === this.currentNoteId)
 				this.$set(this.notes, index, response.data)
 				this.currentNoteId = response.data.id
+				showSuccess(t('amoradev', 'Nota Criada'))
 			} catch (e) {
 				console.error(e)
-				showError(t('notestutorial', 'Could not create the note'))
+				showError(t('amoradev', 'Could not create the note'))
 			}
 			this.updating = false
 		},
@@ -194,9 +182,10 @@ export default {
 			this.updating = true
 			try {
 				await axios.put(generateUrl(`/apps/amoradev/notes/${note.id}`), note)
+				showSuccess(t('amoradev', 'Nota Atualizada'))
 			} catch (e) {
 				console.error(e)
-				showError(t('notestutorial', 'Could not update the note'))
+				showError(t('amoradev', 'Could not update the note'))
 			}
 			this.updating = false
 		},
@@ -211,31 +200,39 @@ export default {
 				if (this.currentNoteId === note.id) {
 					this.currentNoteId = null
 				}
-				showSuccess(t('amoradev', 'Note deleted'))
+				showSuccess(t('amoradev', 'Nota Deletada'))
 			} catch (e) {
 				console.error(e)
-				showError(t('amoradev', 'Could not delete the note'))
+				showError(t('amoradev', 'Nao foi possivel deletar a nota'))
 			}
 		},
 	},
 }
 </script>
 <style scoped>
-	#app-content > div {
-		width: 100%;
-		height: 100%;
-		padding: 20px;
-		display: flex;
-		flex-direction: column;
-		flex-grow: 1;
-	}
+#app-content>div {
+	width: 100%;
+	height: 100%;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
 
-	input[type='text'] {
-		width: 100%;
-	}
+input[type='text'] {
+	width: 100%;
+}
 
-	textarea {
-		flex-grow: 1;
-		width: 100%;
-	}
+textarea {
+	flex-grow: 1;
+	width: 100%;
+}
+
+.title-app{
+	margin-top: 4em;
+	text-align: center;
+}
+.general-content {
+	margin-left: 3em;
+}
 </style>

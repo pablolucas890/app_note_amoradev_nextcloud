@@ -22,7 +22,7 @@ class PageController extends Controller {
 	 */
 	public function index(): TemplateResponse {
 		Util::addScript(Application::APP_ID, 'amoradev-main');
-		// Retorna a pagina apos um get de / no navegador
+		// Retorna o templete apos um get de / no navegador
 		return new TemplateResponse(Application::APP_ID, 'main');
 	}
 }

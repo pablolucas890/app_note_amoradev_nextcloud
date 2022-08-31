@@ -1,4 +1,10 @@
-# Anotacoes
+<!--
+SPDX-FileCopyrightText: Pablo Lucas Silva Santos <pablo@amoradev.com>
+SPDX-License-Identifier: CC0-1.0
+-->
+<img src="gif.gif" width="800">
+
+# Amora Dev App Note NextCloud
 
 - Docs NextCloud Dev: https://docs.nextcloud.com/
 
@@ -6,50 +12,45 @@
 
 - Colocar nome pequeno no App
 
-- Start Server
+- O comando do Nextcloud<a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/occ_command.html#using-the-occ-command">occ</a>(origem do “ownCloud Console”) é a interface de linha de comando do Nextcloud. Você pode realizar muitas operações comuns de servidor com o occ, como instalar e atualizar o Nextcloud, gerenciar usuários, criptografia, senhas, configuração LDAP e muito mais.
+
+## Development
+
+- Install LAMP packages 
+
+- Download nextcloud server
+
+- Place this app in **nextcloud/apps/**
+
+- Start Server:
 
 ```bash
 cd www/var/nextcloud
-```
-```bash
 sudo php -S localhost:8080
 ```
+- O App foi desenvolvido com o Node versao 16.16.0 e Instalado com ``` nvm ```, ```nvm``` e um gerenciador de versao do node e para instala-lo basta seguir o passo a passo <a href="https://github.com/nvm-sh/nvm">clicando aqui</a>
 
-- <a href="https://docs.nextcloud.com/server/latest/admin_manual/configuration_server/occ_command.html#using-the-occ-command">occ command</a>
+- Apos instalar o nvm, basta instalar a versao 16.16.0 do node com o seguinte comando:
 
-<!--
-SPDX-FileCopyrightText: Pablo Lucas Silva Santos <pablo@amoradev.com>
-SPDX-License-Identifier: CC0-1.0
--->
-- Parei em https://docs.nextcloud.com/server/stable/developer_manual/app_development/tutorial.html#writing-a-test-for-the-controller-recommended
-
-# Amora Dev App Note NextCloud
-Place this app in **nextcloud/apps/**
-
-## Building the app
-
-The app can be built by using the provided Makefile by running:
-
-    make
-
-This requires the following things to be present:
-* make
-* which
-* tar: for building the archive
-* curl: used if phpunit and composer are not installed to fetch them from the web
-* npm: for building and testing everything JS, only required if a package.json is placed inside the **js/** folder
-
-The make command will install or update Composer dependencies if a composer.json is present and also **npm run build** if a package.json is present in the **js/** folder. The npm **build** script should use local paths for build systems and package managers, so people that simply want to build the app won't need to install npm libraries globally, e.g.:
-
-**package.json**:
-```json
-"scripts": {
-    "test": "node node_modules/gulp-cli/bin/gulp.js karma",
-    "prebuild": "npm install && node_modules/bower/bin/bower install && node_modules/bower/bin/bower update",
-    "build": "node node_modules/gulp-cli/bin/gulp.js"
-}
+```
+nvm install 16.16.0 && nvm use 16.16.0
 ```
 
+- Voce pode verificar se a versao esta correta rodando:
+
+```
+node --version 
+```
+- Para rodar o projeto, primeiro deve-se baixar as dependencias com o seguinte comando:
+
+```sh
+npm install
+```
+- Buildar o App com o seguinte comando:
+```
+npm run build
+```
+- go to http://localhost:8080/index.php/apps/amoradev
 
 ## Publish to App Store
 
