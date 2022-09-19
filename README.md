@@ -52,6 +52,13 @@ npm run build
 ```
 - go to http://localhost:8080/index.php/apps/amoradev
 
+- Run on NextCloud github: (Change webpack.modules.js)
+```
+amoradev: {
+    main: path.join(__dirname, 'apps/amoradev/src', 'main.js'),
+},
+```
+
 ## Publish to App Store
 
 First get an account for the [App Store](http://apps.nextcloud.com/) then run:
